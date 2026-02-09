@@ -168,7 +168,8 @@ class MeshNetwork:
         if self.online:
             return list(node.neighbors)
         else:
-            # Simulate degraded offline mesh (some neighbors may not respond)
+            # Simulate degraded offline mesh: approximately 2/3 of neighbors respond
+            # (offline mesh is less reliable but still functional)
             return [n for n in node.neighbors if hash(n) % 3 != 0]
     
     def set_online_status(self, online: bool):

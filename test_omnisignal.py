@@ -168,11 +168,8 @@ class TestWarningSystem(unittest.TestCase):
         
         warning_sys.activate_warning(warning)
         
-        # Manually expire the warning
-        for warning_id in warning_sys.active_warnings:
-            warning_sys.active_warnings[warning_id]['expires_at'] = time.time() - 1
-        
-        warning_sys.update()
+        # Use helper method to expire warnings
+        warning_sys.expire_all_warnings()
         
         # Warning should be cleared
         self.assertEqual(warning_sys.led_status, 'OFF')

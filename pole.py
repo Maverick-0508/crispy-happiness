@@ -130,7 +130,8 @@ class OmniSignalPole:
         propagation_info = self.warning_system.get_propagation_info()
         
         if propagation_info and propagation_info.get('hops', 0) < Config.WARNING_PROPAGATION_DISTANCE:
-            # Add small delay for cascading effect
+            # Note: In production, use async/non-blocking delay or event scheduling
+            # This sleep creates a visual cascading effect in the demo
             time.sleep(Config.WARNING_CASCADE_DELAY)
             self.mesh_network.propagate_warning(self.pole_id, propagation_info)
     

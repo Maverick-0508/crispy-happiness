@@ -33,7 +33,8 @@ class WarningSystem:
         Returns:
             True if warning was activated, False if a higher priority warning is active
         """
-        warning_id = f"{warning.get('source', 'unknown')}_{warning.get('detected_at', time.time())}"
+        # Generate unique warning ID using source, timestamp, and hash to avoid collisions
+        warning_id = f"{warning.get('source', 'unknown')}_{warning.get('detected_at', time.time())}_{hash(str(warning))}"
         
         # Check if we should override current warning based on priority
         if self.current_color:
@@ -112,6 +113,16 @@ class WarningSystem:
         self.active_warnings.clear()
         self.led_status = 'OFF'
         self.current_color = None
+    
+    def expire_all_warnings(self):
+        """
+        Helper method to expire all warnings immediately.
+        Primarily for testing purposes.
+        """
+        current_time = time.time()
+        for warning_id in self.active_warnings:
+            self.active_warnings[warning_id]['expires_at'] = current_time - 1
+        self.update()
     
     def should_propagate(self) -> bool:
         """
